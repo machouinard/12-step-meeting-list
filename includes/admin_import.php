@@ -417,12 +417,12 @@ function tmsl_import_page() {
 	*/
 	?>
 	<div class="wrap">
-		<h2><?php _e('Import & Settings', '12-step-meeting-list')?></h2>
+		<h2><?php _e('Import, Export, and Settings', '12-step-meeting-list')?></h2>
 		
 		<div id="poststuff">
-			<div id="post-body" class="columns-2">
-				<div id="post-body-content">
-					
+			<div class="row">
+				<div class="column">
+
 					<?php if ($error) {?>
 					<div class="error inline">
 						<p><?php echo $error?></p>
@@ -617,7 +617,89 @@ function tmsl_import_page() {
 						</div>
 					</div>
 				</div>
-				<div id="postbox-container-1" class="postbox-container">
+
+				<?php
+				$meetings = tsml_count_meetings();
+				if ($meetings) {?>
+				<div class="column">
+					<div class="postbox">
+						<div class="inside">
+							<h3>Export CSV</h3>
+							<p><a class="button button-large" href="<?php echo admin_url('admin-ajax.php') . '?action=csv'?>">
+								<span class="dashicons dashicons-media-spreadsheet"></span>
+								Download File
+								</a></p>
+						</div>
+					</div>
+					<div class="postbox">
+						<div class="inside">
+							<h3>Generate PDF</h3>
+							<form action="<?php echo admin_url('admin-ajax.php')?>">
+								<input type="hidden" name="action" value="tsml_pdf">
+								<div class="row">
+									<div class="column" style="flex-basis: 25%; padding-top: 5px">
+										Paper Size
+									</div>
+									<div class="column" style="flex-basis: 75%">
+										<select name="paper" style="margin-bottom: 10px;">
+											<option value="4x7">4 &times; 7</option>
+											<option value="8.5x11">8.5 &times; 11</option>
+											<option value="11x8.5">11 &times; 8.5</option>
+											<option value="11x17">11 &times; 17</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="column" style="flex-basis: 25%; padding-top: 5px">
+										Columns
+									</div>
+									<div class="column" style="flex-basis: 75%">
+										<select name="columns" style="margin-bottom: 10px;">
+											<?php for ($i = 1; $i < 6; $i++) {?>
+											<option value="<?php echo $i?>"><?php echo $i?></option>
+											<?php }?>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="column" style="flex-basis: 25%; padding-top: 5px">
+										Start Page
+									</div>
+									<div class="column" style="flex-basis: 75%">
+										<select name="start" style="margin-bottom: 10px;">
+											<?php for ($i = 1; $i < 21; $i++) {?>
+											<option value="<?php echo $i?>"><?php echo $i?></option>
+											<?php }?>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="column" style="flex-basis: 25%; padding-top: 5px">
+										Font Size
+									</div>
+									<div class="column" style="flex-basis: 75%">
+										<select name="start" style="margin-bottom: 10px;">
+											<option value="large">Large</option>
+											<option value="normal" selected>Normal</option>
+											<option value="small">Small</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="column" style="flex-basis: 25%;">
+									</div>
+									<div class="column" style="flex-basis: 75%">
+										<input type="submit" class="button">
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<?php }?>
+
+				<div class="column">
+
 
 					<?php if (version_compare(PHP_VERSION, '5.4') < 0) {?>
 					<div class="notice notice-warning inline">
@@ -634,17 +716,12 @@ function tmsl_import_page() {
 					<div class="postbox" id="wheres_my_info">
 						<div class="inside">
 							<?php
-							$meetings = tsml_count_meetings();
 							$locations = tsml_count_locations();
 							$regions = tsml_count_regions();
 							$groups = tsml_count_groups();
 							?>
 							<h3><?php _e('Where\'s My Info?', '12-step-meeting-list')?></h3>
 							<p><?php printf(__('Your public meetings page is <a href="%s">right here</a>. Link that page from your site\'s nav menu to make it visible to the public.', '12-step-meeting-list'), get_post_type_archive_link('tsml_meeting'))?></p>
-							<?php if ($meetings) {?>
-							<p><?php printf(__('You can also download your meetings in <a href="%s">CSV format</a>.', '12-step-meeting-list'), admin_url('admin-ajax.php') . '?action=csv')?></p>
-							<p><?php printf(__('A very basic PDF schedule is available in three sizes: <a href="%s">4&times;7</a>, <a href="%s">half page</a> and <a href="%s">full page</a>.', '12-step-meeting-list'), admin_url('admin-ajax.php') . '?action=tsml_pdf&width=4&height=7', admin_url('admin-ajax.php') . '?action=tsml_pdf', admin_url('admin-ajax.php') . '?action=tsml_pdf&width=8.5')?></p>
-							<?php }?>
 							<div id="tsml_counts"<?php if (($meetings + $locations + $groups + $regions) == 0) {?> class="hidden"<?php }?>>
 								<p><?php _e('You have:', '12-step-meeting-list')?></p>
 								<ul class="ul-disc">

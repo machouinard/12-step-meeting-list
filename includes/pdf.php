@@ -47,7 +47,7 @@ if (!class_exists('TSMLPDF')) {
                 'font_size' => 'normal',
                 'height' => 11,
                 'keywords' => 'Meetings',
-                'margin' => 1,
+                'margin' => .25,
                 'orientation' => 'p',
                 'subject' => 'Meeting Schedule',
                 'title' => 'Meeting Schedule',
@@ -59,12 +59,7 @@ if (!class_exists('TSMLPDF')) {
                 'width' => 8.5,
             ), $options);
 
-            //todo create form with independent page + font sizes
-            if ($this->options['width'] == 4 && $this->options['height'] == 7) {
-                $this->options = array_merge($this->options, array(
-                    'font_size' => 'small'
-                ));
-            }
+            //dd($this->options);
             
             $this->content_width = $this->options['width'] - ($this->options['margin'] * 2);
 

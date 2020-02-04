@@ -39,6 +39,17 @@ body {
 				transition: width .6s ease;
 			}
 		}
+
+		//row
+		.row {
+			margin: 0 -10px;
+			display: flex;
+			.column {
+				flex-grow: 1;
+				flex-basis: 0;
+				padding: 0 10px;
+			}
+		}
 		
 		//meeting types legend
 		.postbox, .notice-warning {

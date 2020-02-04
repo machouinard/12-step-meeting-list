@@ -77,16 +77,21 @@ if (!function_exists('tsml_ajax_pdf')) {
 		//include the file, which includes TCPDF
 		include(TSML_PATH . '/includes/pdf.php');
 
+		if (!empty($_GET['paper']) && strpos($_GET['paper'], 'x')) {
+			list ($width, $height) = explode('x', $_GET['paper']);
+			$width = floatval($width);
+			$height = floatval($height);
+		} else {
+			$width = 8.5;
+			$height = 11;
+		}
+
 		//create new PDF document
-		$pdf = new TSMLPDF(array(
-			'margin' => !empty($_GET['margin']) ? floatval($_GET['margin']) : .25, 
-			'width' => !empty($_GET['width']) ? floatval($_GET['width']) : 4.25,
-			'height' => !empty($_GET['height']) ? floatval($_GET['height']) : 11,
-		));
+		$pdf = new TSMLPDF(compact('width', 'height'));
 
 		//send to browser
 		if (!headers_sent()) {
-			$pdf->Output('meeting-schedule.pdf', 'I');
+			$pdf->Output('meeting-schedule.pdf');
 		}
 
 		exit;
