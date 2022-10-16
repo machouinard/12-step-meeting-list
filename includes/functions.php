@@ -1074,7 +1074,7 @@ function tsml_get_meetings($arguments = [], $from_cache = true, $full_export = f
 	global $tsml_cache, $tsml_cache_writable, $tsml_contact_fields, $tsml_contact_display;
 
 	//start by grabbing all meetings
-	if ($from_cache && $tsml_cache_writable && $meetings = file_get_contents(WP_CONTENT_DIR . $tsml_cache)) {
+	if ($from_cache && $tsml_cache_writable && file_exists( WP_CONTENT_DIR . $tsml_cache ) && $meetings = file_get_contents(WP_CONTENT_DIR . $tsml_cache)) {
 		$meetings = json_decode($meetings, true);
 	} else {
 		//from database
@@ -1725,7 +1725,7 @@ function tsml_import_reformat_googlesheet($data)
 
 	foreach ($data['values'] as $row) {
 
-		//creates a meeting array with elements corresponding to each column header of the Google Sheet; updated for Google Sheets v4 API 
+		//creates a meeting array with elements corresponding to each column header of the Google Sheet; updated for Google Sheets v4 API
 		$meeting = [];
 		for ($j = 0; $j < $header_count; $j++) {
 			if (isset($row[$j])) {
@@ -2070,7 +2070,7 @@ function tsml_import_changes($feed_meetings, $data_source_url, $data_source_last
 		__('Saturday', '12-step-meeting-list'),
 	];
 
-	// get local meetings 
+	// get local meetings
 	$all_db_meetings = tsml_get_meetings();
 	$ds_ids = tsml_get_data_source_ids($data_source_url);
 	sort($ds_ids);
